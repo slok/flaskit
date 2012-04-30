@@ -1,0 +1,47 @@
+
+body {
+    background-image:url('../img/bg.png');
+} 
+
+.foreground {
+
+    padding-top: 60px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    
+    margin-bottom: 30px;
+    
+    background-color:#ffffff;
+    
+    -moz-box-shadow: 1px 1px 6px #000000;
+    -webkit-box-shadow: 1px 1px 6px #000000;
+    box-shadow: 1px 1px 6px #000000;
+    filter: progid: DXImageTransform.Microsoft.Shadow(strength = 1, direction = 135, color = '#000000');
+    -ms-filter: "progid: DXImageTransform.Microsoft.Shadow(strength = 1, Direction = 135, Color = '#000000')";
+    /*Shadows look very different in IE (Only cardinal directions supported)*/
+    /*INNER ELEMENTS MUST NOT BREAK THIS ELEMENTS BOUNDARIES*/
+    /*Element should have a background-color*/
+    /*All filters must be placed together*/
+    /*IE 7 AND 8 DO NOT SUPPORT BLUR PROPERTY OF SHADOWS*/
+    
+    -moz-border-radius: 0px 0px 10px 10px;
+    -webkit-border-radius: 0px 0px 10px 10px;
+    border-radius: 0px 0px 10px 10px;
+    /*IE 7 AND 8 DO NOT SUPPORT BORDER RADIUS*/
+
+} 
+
+.table-custom thead th {
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+
+.avatar{
+    -moz-border-radius: 30px;
+    -webkit-border-radius: 30px;
+    border-radius: 5px;
+    /*IE 7 AND 8 DO NOT SUPPORT BORDER RADIUS*/
+
+}
+

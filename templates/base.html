@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <title>Flaskit!</title>
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap.css') }}">
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
+        
+    </head>
+
+    <body>
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="/">Flaskit! - <small>Git frontend powered by flask</small></a>
+                    <div class="nav-collapse">
+                        <ul class="nav">
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </div>
+        </div>
+
+        <div class="container foreground">
+
+            {% block body %}
+            {% endblock body %}
+
+            <hr>
+
+            <footer>
+            <p>&copy; slok 2012</p>
+            </footer>
+
+        </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    
+  </body>
+  
+</div>
+</html>

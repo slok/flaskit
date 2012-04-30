@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{%  block body %}
+ 
+        <h1>Commit: {{commit.hex}}</h1>
+        
+        <div class="well">
+            <strong>{{ commit.author.name }}</strong> on {{ commit.author.time }}
+                {{ commit.message }}
+                {{ commit.author }}
+                {{ commit.committer }}
+                
+                {% for entry in commit.tree %}
+                    <li>{{entry.name}} {{entry.hex}} </li>
+                {% endfor %}
+                
+                {{ commit.parents.hex }}
+        </div>
+
+      
+
+{% endblock body %}
