@@ -49,9 +49,10 @@ def repo_dashboard(repo_key, branch):
     for tree_file in tree:
         if 'README' in tree_file.name.upper():
             readme = tree_file.to_object().read_raw().decode("utf-8")
+            readme_name = tree_file.name
     
     return render_template('repo-dashboard.html', repo_key=repo_key, branch=branch, 
-                            tree_files=tree_files, readme=readme)
+                            tree_files=tree_files, readme=readme, readme_name=readme_name)
                             
 
 @app.route('/<repo_key>/tree/<branch>/commits/')

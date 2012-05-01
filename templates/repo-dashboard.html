@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{%  block body %}
+ 
+    <h1>{{repo_key}} /</h1>
+    
+   
+    <pre>
+        {% for file in tree_files %}
+            {{file.name}}
+        {% endfor %}
+    </pre>
+    
+    <table class="table table-bordered table-condensed table-readme">
+            <thead>
+                <tr>
+                    <th> 
+                      <h2>  <i class="icon-book"></i>   {{readme_name}}</h2>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                         {{readme | markdown}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+       
+    </pre>
+
+{% endblock body %}
