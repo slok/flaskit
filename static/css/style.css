@@ -37,27 +37,35 @@ body {
     border-color: #bce8f1;
 }
 
+.table-tree,
 .table-readme thead th {
     background-image: linear-gradient(bottom, rgb(240,240,240) 73%, rgb(230,230,230) 17%);
-background-image: -o-linear-gradient(bottom, rgb(240,240,240) 73%, rgb(230,230,230) 17%);
-background-image: -moz-linear-gradient(bottom, rgb(240,240,240) 73%, rgb(230,230,230) 17%);
-background-image: -webkit-linear-gradient(bottom, rgb(240,240,240) 73%, rgb(230,230,230) 17%);
-background-image: -ms-linear-gradient(bottom, rgb(240,240,240) 73%, rgb(230,230,230) 17%);
+    background-image: -o-linear-gradient(bottom, rgb(240,240,240) 73%, rgb(230,230,230) 17%);
+    background-image: -moz-linear-gradient(bottom, rgb(240,240,240) 73%, rgb(230,230,230) 17%);
+    background-image: -webkit-linear-gradient(bottom, rgb(240,240,240) 73%, rgb(230,230,230) 17%);
+    background-image: -ms-linear-gradient(bottom, rgb(240,240,240) 73%, rgb(230,230,230) 17%);
 
-background-image: -webkit-gradient(
-	linear,
-	left bottom,
-	left top,
-	color-stop(0.73, rgb(240,240,240)),
-	color-stop(0.17, rgb(230,230,230))
-);
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0.73, rgb(240,240,240)),
+        color-stop(0.17, rgb(230,230,230))
+    );
 }
 
+.table-tree tbody tr:hover td,
+.table-tree tbody tr:hover th,
+.table-tree tbody td{
+    background-color: fafafa;
+}
 .table-readme tbody tr:hover td,
-.table-readme tbody tr:hover th {
+.table-readme tbody tr:hover th,
+.table-readme tbody td{
   background-color: ffffff;
 }
 
+.table-tree,
 .table-readme{
     border:solid 3px #d5d5d5;
 }

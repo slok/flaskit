@@ -2,32 +2,53 @@
 
 {%  block body %}
  
-    <h1>{{repo_key}} /</h1>
+    <h1>{{repo_key}} /{{tree_path}}</h1>
     
    
-    <pre>
-        {% for file in tree_files %}
-            {{file.name}}
-        {% endfor %}
-    </pre>
-    
-    <table class="table table-bordered table-condensed table-readme">
+    <table class="table table-bordered table-condensed table-tree">
             <thead>
                 <tr>
                     <th> 
-                      <h2>  <i class="icon-book"></i>   {{readme_name}}</h2>
+                      Name
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>
-                         {{readme | markdown}}
-                    </td>
+                {% for file, dir in tree_files.iteritems() %}
+                    <tr>
+                        <td>
+                            <a href="{{ url_for('repo_dashboard', repo_key=repo_key, 
+                                        branch=branch, tree_path=tree_path + file.name) }}">
+                            {% if dir %}
+                                <i class="icon-folder-open"></i> {{file.name}}
+                            {% else %}
+                                <i class="icon-file"></i> {{file.name}}
+                            {% endif %}
+                            </a>
+                        </td>
                 </tr>
+                {% endfor %}
             </tbody>
+    </table>
+    
+        
+    
+    {% if readme %}
+        <table class="table table-bordered table-condensed table-readme">
+                <thead>
+                    <tr>
+                        <th> 
+                          <h2>  <i class="icon-book"></i>   {{readme_name}}</h2>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                             {{readme | markdown}}
+                        </td>
+                    </tr>
+                </tbody>
         </table>
-       
-    </pre>
-
+    {% endif %}
 {% endblock body %}
