@@ -1,0 +1,5 @@
+flask==0.8
+pygit2
+markdown
+Flask-Markdown
+flask-gravatar
