@@ -4,6 +4,17 @@
  
     <h1>{{repo_key}} commit history</h1>
  
+    <form name="branches">
+        <select id="branch" OnChange="window.open(branches.branch.options[selectedIndex].value)">
+            {% for ref in references%}
+                {% if ref == selected_branch %}
+                    <option selected value="{{ url_for('commit_history', repo_key=repo_key, branch=ref) }}">{{ref}}</option>
+                {% else %}
+                    <option value="{{ url_for('commit_history', repo_key=repo_key, branch=ref) }}">{{ref}}</option>
+                {% endif %}
+            {%endfor%}
+        </select>
+    </form>
      {% for commits_per_day in commits %}
         <table class="table table-striped table-bordered table-condensed table-custom">
             <thead>

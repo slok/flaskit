@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flaskext import gravatar
 import sys
 import pygit2
@@ -28,24 +28,35 @@ def index():
     return render_template('index.html', repos=repos)
 
 
-@app.route('/<repo_key>')
-def repo_details(repo_key):
-    
-   
-    
+@app.route('/<repo_key>/tree/<branch>/commits')
+def commit_history(repo_key, branch):
     
     repo = pygit2.Repository(settings.REPOS[repo_key])
     
-    head = repo.lookup_reference('HEAD')
-
-    head = head.resolve()
+    #get all teh branches and set the name branch in a ref list (don't 
+    #add the selected one, this will be added sepparetly in the template)
+    references = []
+    prefix = 'refs/heads/'
+    selected_branch = branch
+    for ref in repo.listall_references():
+        #get the name of the branch without the pefix
+        if (prefix in ref):
+            references.append(ref.replace(prefix, '',1))
     
+    
+    
+    #Get the branch
+    branch = repo.lookup_reference(prefix + branch)
+    branch = branch.resolve()
+    
+    
+    #Start getting all the commits from the branch
     commits = []
     commits_per_day = []
     previous_commit_time = None
     
     #Group commits by day (I use list instead of a dict because the list is ordered already, so I don't need to sort the dict)
-    for commit in repo.walk(head.oid, pygit2.GIT_SORT_TIME):
+    for commit in repo.walk(branch.oid, pygit2.GIT_SORT_TIME):
         
         commit_time = filters.convert_unix_time_filter(commit.author.time, '%d %b %Y')
         
@@ -58,7 +69,8 @@ def repo_details(repo_key):
         
         previous_commit_time = commit_time
     
-    return render_template('commit-history.html', commits=commits, repo_key=repo_key)
+    return render_template('commit-history.html', commits=commits, repo_key=repo_key, 
+                            references = references, selected_branch=selected_branch)
 
 
 @app.route('/<repo_key>/commit/<commit_key>')

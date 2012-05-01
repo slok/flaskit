@@ -4,7 +4,7 @@
     <h1>Repositories</h1>
      {% for repo_key, repo in repos.iteritems() %}
         <div class="alert alert-info">                
-           <a href="{{ url_for('repo_details', repo_key=repo_key) }}"> {{repo_key}} ({{ repo.workdir }})</a>
+           <a href="{{ url_for('commit_history', repo_key=repo_key, branch='master') }}"> {{repo_key}} ({{ repo.workdir }})</a>
         </div>
      {% endfor %}
       
