@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request
-from flaskext import gravatar
+from flaskext import gravatar, markdown
+
+
 import sys
 import pygit2
 import settings
@@ -7,12 +9,15 @@ import filters
 
 app = Flask(__name__)
 
+#Extensions
 gravatar = gravatar.Gravatar(app,
                     size=50,
                     rating='g',
                     default='mm',
                     force_default=False,
                     force_lower=False)
+
+markdown.Markdown(app)
 
 #View
 @app.route('/')
@@ -27,8 +32,29 @@ def index():
     
     return render_template('index.html', repos=repos)
 
+@app.route('/<repo_key>/tree/<branch>/')
+def repo_dashboard(repo_key, branch):
+    
+    repo = pygit2.Repository(settings.REPOS[repo_key])
+    
+    #Get the branch
+    prefix = 'refs/heads/'
+    branch = repo.lookup_reference(prefix + branch)
+    branch = branch.resolve()
+    
+    #get the tree of files
+    tree = repo[branch.oid].tree
+    tree_files = {}
+    
+    for tree_file in tree:
+        if 'README' in tree_file.name.upper():
+            readme = tree_file.to_object().read_raw().decode("utf-8")
+    
+    return render_template('repo-dashboard.html', repo_key=repo_key, branch=branch, 
+                            tree_files=tree_files, readme=readme)
+                            
 
-@app.route('/<repo_key>/tree/<branch>/commits')
+@app.route('/<repo_key>/tree/<branch>/commits/')
 def commit_history(repo_key, branch):
     
     repo = pygit2.Repository(settings.REPOS[repo_key])
@@ -73,7 +99,7 @@ def commit_history(repo_key, branch):
                             references = references, selected_branch=selected_branch)
 
 
-@app.route('/<repo_key>/commit/<commit_key>')
+@app.route('/<repo_key>/commit/<commit_key>/')
 def commit_detail(repo_key, commit_key):
     
     repo = pygit2.Repository(settings.REPOS[repo_key])
