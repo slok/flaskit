@@ -16,8 +16,7 @@ Requeriments
 * [Flask](http://flask.pocoo.org/)
     * [Jinja2](http://jinja.pocoo.org/docs/)
     * [Werkzeug](http://werkzeug.pocoo.org/)
-* [Pygit2](https://github.com/libgit2/pygit2)
-    * [libgit2](http://libgit2.github.com/)
+* [Dulwich](https://github.com/jelmer/dulwich)
 
 License
 -------
