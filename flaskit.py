@@ -8,6 +8,9 @@ import settings
 import filters
 import stat
 
+
+from dulwich.repo import Repo
+
 app = Flask(__name__)
 
 #Extensions
@@ -20,6 +23,12 @@ gravatar = gravatar.Gravatar(app,
 
 markdown.Markdown(app)
 
+
+
+#Configuration
+LOCAL_BRANCH_PREFIX = "refs/heads/"
+REMOTE_BRANCH_PREFIX = "refs/remotes/"
+
 #View
 @app.route('/')
 def index():
@@ -29,7 +38,7 @@ def index():
     
     repos = {}
     for key, path in settings.REPOS.iteritems():
-        repos[key] = pygit2.Repository(path)
+        repos[key] = Repo(path)
     
     return render_template('index.html', repos=repos)
 
@@ -119,26 +128,22 @@ def repo_dashboard(repo_key, branch, tree_path=''):
             
                             
 
-@app.route('/<repo_key>/tree/<branch>/commits/')
+@app.route('/<repo_key>/commits/<branch>')
 def commit_history(repo_key, branch):
     
-    repo = pygit2.Repository(settings.REPOS[repo_key])
+    repo = Repo(settings.REPOS[repo_key])
     
-    #get all teh branches and set the name branch in a ref list (don't 
+    #get all the branches and set the name branch in a ref list (don't 
     #add the selected one, this will be added sepparetly in the template)
     references = []
-    prefix = 'refs/heads/'
     selected_branch = branch
-    for ref in repo.listall_references():
+    for ref, sha in repo.get_refs().iteritems():
         #get the name of the branch without the pefix
-        if (prefix in ref):
-            references.append(ref.replace(prefix, '',1))
+        if (LOCAL_BRANCH_PREFIX in ref):
+            references.append(ref.replace(LOCAL_BRANCH_PREFIX, '', 1))
     
-    
-    
-    #Get the branch
-    branch = repo.lookup_reference(prefix + branch)
-    branch = branch.resolve()
+    #Get the branch walker
+    walker = repo.get_walker(include = [repo.get_refs()[LOCAL_BRANCH_PREFIX+branch], ])
     
     
     #Start getting all the commits from the branch
@@ -147,9 +152,10 @@ def commit_history(repo_key, branch):
     previous_commit_time = None
     
     #Group commits by day (I use list instead of a dict because the list is ordered already, so I don't need to sort the dict)
-    for commit in repo.walk(branch.oid, pygit2.GIT_SORT_TIME):
+    for i in walker:
         
-        commit_time = filters.convert_unix_time_filter(commit.author.time, '%d %b %Y')
+        commit = i.commit
+        commit_time = filters.convert_unix_time_filter(commit.commit_time, '%d %b %Y')
         
         #if is new or like the previous one time, then add to the list, if not then save the list and create a new one
         if (previous_commit_time is None) or (commit_time == previous_commit_time):

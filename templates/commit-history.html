@@ -20,7 +20,7 @@
             <thead>
                 <tr>
                     <th> 
-                        {{ commits_per_day[0].author.time|convert_unix_time('%d %b %Y') }}
+                        {{ commits_per_day[0].commit_time|convert_unix_time('%d %b %Y') }}
                     </th>
                 </tr>
             </thead>
@@ -30,16 +30,16 @@
                     <td>
                     <div class="row-fluid">
                         <div class="span2">
-                            <img class="avatar" src="{{ commit.author.email | gravatar }}" alt="{{commit.author.email}} gravatar">
+                            <img class="avatar" src="{{ commit.author | get_email_from_commit_author | gravatar }}" alt="{{commit.author | get_email_from_commit_author}} gravatar">
                         </div>
                         <div class="span8">
                             <strong>{{ commit.message|truncate(75) }}</strong>
-                            <p><small>{{ commit.author.name }} at {{commit.author.time|convert_unix_time('%H:%M:%S') }}</small> </p>
+                            <p><small>{{ commit.author.name }} at {{commit.commit_time|convert_unix_time('%H:%M:%S') }}</small> </p>
                         </div>
                         <div class="span2">
-                            <a href="{{ url_for('commit_detail', repo_key=repo_key, commit_key=commit.hex) }}" 
+                            <a href="{{ url_for('commit_detail', repo_key=repo_key, commit_key=commit.id) }}" 
                             class="btn btn-primary btn-mini">
-                            {{commit.hex|truncate_hex(10)}} <i class="icon-circle-arrow-right icon-white"></i>
+                            {{commit.id|truncate_hex(10)}} <i class="icon-circle-arrow-right icon-white"></i>
                             </a>
                         </div>
                    
