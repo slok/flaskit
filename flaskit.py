@@ -135,7 +135,9 @@ def commit_history(repo_key, branch):
             commits_per_day = [commit,]
         
         previous_commit_time = commit_time
-    
+        
+    #Add last ones
+    commits.append(commits_per_day)
     return render_template('commit-history.html', commits=commits, repo_key=repo_key, 
                             references = references, selected_branch=selected_branch)
 
