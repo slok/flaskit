@@ -18,7 +18,11 @@ def get_email_from_commit_author_filter(author):
     m = re.match(r".*<(.+@.+\..+)>", author)
     return m.group(1)
 
+def get_author_from_commit_author_filter(author):
+    m = re.match(r"(.*)<.+@.+\..+>", author)
+    return m.group(1)
 
 jinja2.filters.FILTERS['convert_unix_time'] = convert_unix_time_filter
 jinja2.filters.FILTERS['truncate_hex'] = truncate_hex_filter
 jinja2.filters.FILTERS['get_email_from_commit_author'] = get_email_from_commit_author_filter
+jinja2.filters.FILTERS['get_author_from_commit_author'] = get_author_from_commit_author_filter

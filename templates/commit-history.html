@@ -34,7 +34,7 @@
                         </div>
                         <div class="span8">
                             <strong>{{ commit.message|truncate(75) }}</strong>
-                            <p><small>{{ commit.author.name }} at {{commit.commit_time|convert_unix_time('%H:%M:%S') }}</small> </p>
+                            <p><small>{{ commit.author | get_author_from_commit_author }} at {{commit.commit_time|convert_unix_time('%H:%M:%S') }}</small> </p>
                         </div>
                         <div class="span2">
                             <a href="{{ url_for('commit_detail', repo_key=repo_key, commit_key=commit.id) }}" 
