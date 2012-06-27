@@ -6,8 +6,3 @@ python:
 install: pip install -r requirements.txt --use-mirrors
 
 script: python ./flaskit_tests.py
-
-before_install:
-  - sudo add-apt-repository ppa:inz/ppa
-  - sudo apt-get update 
-  - sudo apt-get install libgit2
