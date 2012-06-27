@@ -1,5 +1,8 @@
 Flaskit!
 ========
+Status
+------
+[![Build Status](https://secure.travis-ci.org/slok/flaskit.png?branch=master)](http://travis-ci.org/slok/flaskit)
 
 Description
 -----------
