@@ -18,11 +18,11 @@
                     <tr>
                         <td>
                             <a href="{{ url_for('repo_dashboard', repo_key=repo_key, 
-                                        branch=branch, tree_path=tree_path + file.name) }}">
+                                        branch=branch, tree_path=tree_path + file[0]) }}">
                             {% if dir %}
-                                <i class="icon-folder-open"></i> {{file.name}}
+                                <i class="icon-folder-open"></i> {{file[0]}}
                             {% else %}
-                                <i class="icon-file"></i> {{file.name}}
+                                <i class="icon-file"></i> {{file[0]}}
                             {% endif %}
                             </a>
                         </td>

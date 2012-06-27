@@ -3,13 +3,13 @@ from flaskext import gravatar, markdown
 
 
 import sys
-import pygit2
 import settings
 import filters
-import stat
 
+import utils
 
 from dulwich.repo import Repo
+from dulwich.objects import Blob
 
 app = Flask(__name__)
 
@@ -46,87 +46,57 @@ def index():
 @app.route('/<repo_key>/tree/<branch>/<path:tree_path>/')
 def repo_dashboard(repo_key, branch, tree_path=''):
     
+    #Get repo & branch
+    repo = Repo(settings.REPOS[repo_key])
+    try:
+        branch_or_sha = repo.get_refs()[LOCAL_BRANCH_PREFIX+branch]
+    except KeyError:
+        #If there is no branch then is a commit sha
+        branch_or_sha = branch
     
-    repo = pygit2.Repository(settings.REPOS[repo_key])
-    #Get the branch (repo)
-    prefix = 'refs/heads/'
     branch_name = branch
-    branch = repo.lookup_reference(prefix + branch)
-    branch = branch.resolve()
     
-    #get the tree of files (here starts everything)
-    tree = repo[branch.oid].tree
+    selected_commit = repo[branch_or_sha]
     
-    # If the path isn't the root dir then we have to get the object for
-    # the checks of file type, maybe is a regular file or maybe is dir
-    if tree_path is not '':
-        #Get the last file to display
-        tree_files = tree_path.split('/')
+    #Get files
+    tree_files={}
+    splitted_path = tree_path.split('/')
     
-        def get_entry_recursively(tree, path_file_keys):            
-            
-            #apply recursively this function until only one file remains for searching
-            if len(path_file_keys) > 1:
-                search_key = path_file_keys.pop(0)
-                #search in our git tree for the name that we want
-                for tree_entry in tree:
-                    #if we have found the  name, then get that entry from the tree
-                    if tree_entry.name == search_key:
-                        tree_entry = tree_entry.to_object()
-                        break
-                #Call again this function to search in the found entry. This are paths so
-                # this entry is a tree too and because of this we can do the same with this entry
-                #until the las entry is found. In that case we return the entry, then outside of this
-                #function we will check if is a directory or is a raw file
-                return get_entry_recursively(tree_entry, path_file_keys)
-                
-            return tree[path_file_keys.pop(0)]
-        
-
-
-        tree_file = get_entry_recursively(tree, tree_files)
-        #At this moment in tree_file we have the tree entry (we don't know if is a file or a dir)
+    #if we are root folder then empty list
+    if len(splitted_path) == 1 and splitted_path[0] =='':
+        splitted_path = []
+    else:    
+        splitted_path.reverse()
     
+    tree = repo[selected_commit.tree]
+    #for tree_file in tree.iteritems():
+    #    tree_files[tree_file] = stat.S_ISDIR(tree_file[1])
+    
+    tree_files = utils.get_repo_files(repo, tree, splitted_path)
+    
+    
+    #Show file content if is a blob (raw file, not dir)
+    if isinstance(tree_files, Blob):
+        file_code = tree_files.as_raw_string()
+        return render_template('file-detail.html', repo_key=repo_key, branch=branch_name, file_code=file_code)
     #Show tree if is a empty path (root folder) or a subforlder
-    if (tree_path is '') or (stat.S_ISDIR(tree_file.attributes)):
-        
-        tree_files = {}
-        readme = None
-        readme_name = None
-        
-        # Check again if is a dir to prepare the subtree if not then the
-        # root tree is in the tree var already
-        if tree_path is not '':
-            tree = repo[tree_file.oid]
-        
-        for tree_file in tree:
-            #If is readme file do one more action
-            if 'README' in tree_file.name.upper():
-                readme = tree_file.to_object().read_raw().decode("utf-8")
-                readme_name = tree_file.name
-                
-            #if the file is a dir, then mark as directory (for the icon :)
-            #FIXME: Sort the dict
-            if stat.S_ISDIR(tree_file.attributes):
-                tree_files[tree_file] = True
-            else:
-                tree_files[tree_file] = False
-        
+    else:
+        #Check readme
+        readme = ''
+        readme_name = ''
+        for maybe_readme, directory in tree_files.iteritems():
+            if 'readme' in maybe_readme[0].lower():
+                readme_name = maybe_readme[0]
+                readme = repo[maybe_readme[2]].as_raw_string()
+                break
         
         #Little hack for the url generating
         tree_path = tree_path + '/' if tree_path is not '' else tree_path
-                
+        
         return render_template('repo-dashboard.html', repo_key=repo_key, branch=branch_name, 
                                 tree_files=tree_files, readme=readme, readme_name=readme_name, 
                                 tree_path=tree_path)
-                                
-    #Show file content if isn't a directory
-    else:
-        
-        file_code = repo[tree_file.oid].read_raw().decode("utf-8")
-        return render_template('file-detail.html', repo_key=repo_key, branch=branch, file_code=file_code)
-            
-                            
+                        
 
 @app.route('/<repo_key>/commits/<branch>')
 def commit_history(repo_key, branch):
