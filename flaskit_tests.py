@@ -21,7 +21,7 @@ class FlaskitTestCase(unittest.TestCase):
         
         #Check that are some files and the readme
         assert '<a href="/flaskit/tree/master/README.md/">' in rv.data
-        assert '<a href="/flaskit/tree/master/requeriments.txt/">' in rv.data
+        assert '<a href="/flaskit/tree/master/requirements.txt/">' in rv.data
         assert '<a href="/flaskit/tree/master/filters.py/">' in rv.data
         assert '<a href="/flaskit/tree/master/flaskit.py/">' in rv.data
         assert '<a href="/flaskit/tree/master/.gitignore/">' in rv.data
