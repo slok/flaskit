@@ -98,7 +98,7 @@ def repo_dashboard(repo_key, branch, tree_path=''):
                                 tree_path=tree_path)
                         
 
-@app.route('/<repo_key>/commits/<branch>')
+@app.route('/<repo_key>/commits/<branch>/')
 def commit_history(repo_key, branch):
     
     repo = Repo(settings.REPOS[repo_key])
