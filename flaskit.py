@@ -148,10 +148,12 @@ def commit_history(repo_key, branch):
 @app.route('/<repo_key>/commit/<commit_key>/')
 def commit_detail(repo_key, commit_key):
     
-    repo = pygit2.Repository(settings.REPOS[repo_key])
+    repo = Repo(settings.REPOS[repo_key])
     
     commit = repo[commit_key]
-        
+
+    print(commit.parents)
+    
     return render_template('commit-detail.html', commit=commit)
 
 

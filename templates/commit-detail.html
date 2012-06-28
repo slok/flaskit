@@ -4,18 +4,35 @@
  
         <h1>Commit: {{commit.hex}}</h1>
         
-        <div class="well">
-            <strong>{{ commit.author.name }}</strong> on {{ commit.author.time }}
-                {{ commit.message }}
-                {{ commit.author }}
-                {{ commit.committer }}
-                
-                {% for entry in commit.tree %}
-                    <li>{{entry.name}} {{entry.hex}} </li>
-                {% endfor %}
-                
-                {{ commit.parents.hex }}
-        </div>
+        <table class="table table-striped table-bordered table-condensed table-custom">
+            <thead>
+                <tr>
+                    <th> 
+                        {{ commit.message }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <tr>
+                    <td>
+                        <div class="row-fluid">
+                            <div class="span1">
+                                <img class="avatar" src="{{ commit.author | get_email_from_commit_author | gravatar }}" alt="{{commit.author | get_email_from_commit_author}} gravatar">
+                            </div>
+
+                            <div class="span3">
+                                 <strong>{{ commit.message.decode('utf8', 'ignore') | truncate(75) }}</strong>
+                                    <p><small>{{ commit.author | get_author_from_commit_author }} at {{commit.commit_time|convert_unix_time('%H:%M:%S') }}</small> </p>
+                            </div>
+
+                            <div class="span8">
+                                 Parents: {{commit.parents}}
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
       
 
