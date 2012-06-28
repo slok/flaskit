@@ -3,3 +3,4 @@ dulwich
 markdown
 Flask-Markdown
 flask-gravatar
+pygments

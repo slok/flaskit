@@ -61,7 +61,8 @@ def repo_dashboard(repo_key, branch, tree_path=''):
     #Get files
     tree_files={}
     splitted_path = tree_path.split('/')
-    
+    #Get filename (maybe we need fo the blob)
+    file_name = splitted_path[len(splitted_path)-1]
     #if we are root folder then empty list
     if len(splitted_path) == 1 and splitted_path[0] =='':
         splitted_path = []
@@ -78,7 +79,9 @@ def repo_dashboard(repo_key, branch, tree_path=''):
     #Show file content if is a blob (raw file, not dir)
     if isinstance(tree_files, Blob):
         file_code = tree_files.as_raw_string()
-        return render_template('file-detail.html', repo_key=repo_key, branch=branch_name, file_code=file_code)
+
+        return render_template('file-detail.html', repo_key=repo_key, branch=branch_name,
+                                file_code=file_code, file_name=file_name)
     #Show tree if is a empty path (root folder) or a subforlder
     else:
         #Check readme
