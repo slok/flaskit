@@ -33,7 +33,7 @@
                             <img class="avatar" src="{{ commit.author | get_email_from_commit_author | gravatar }}" alt="{{commit.author | get_email_from_commit_author}} gravatar">
                         </div>
                         <div class="span9">
-                            <strong>{{ commit.message|truncate(75) }}</strong>
+                            <strong>{{ commit.message.decode('utf8', 'ignore') | truncate(75) }}</strong>
                             <p><small>{{ commit.author | get_author_from_commit_author }} at {{commit.commit_time|convert_unix_time('%H:%M:%S') }}</small> </p>
                         </div>
                         <div class="span2">
