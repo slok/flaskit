@@ -19,10 +19,14 @@ def truncate_hex_filter(hex_number, length):
 
 def get_email_from_commit_author_filter(author):
     m = re.match(r".*<(.+@.+\..+)>", author)
+    
+    if not m:
+        return ''
+    
     return m.group(1)
 
 def get_author_from_commit_author_filter(author):
-    m = re.match(r"(.*)<.+@.+\..+>", author)
+    m = re.match(r"(.*)<.+>", author)
     return m.group(1)
 
 def pygmetize_by_name_filter(code, name):
