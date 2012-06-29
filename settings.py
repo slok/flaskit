@@ -6,5 +6,4 @@ REPOS = {
             #'mdissphoto':'/home/slok/workspace/mdissphoto/.git',
             #'django-chameleon':'/home/slok/django-chameleon.git',
             'flaskit':'.git',
-            'mdissphoto':'/home/slok/workspace/mdissphoto'
 }
